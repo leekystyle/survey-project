@@ -1,0 +1,4 @@
+survey_results/
+__pycache__/
+*.pyc
+.env
