@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기관장 기관경영 만족도 조사</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section-title {
+            font-size: 1.2em;
+            color: #1a237e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a237e;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        .question-text {
+            margin-bottom: 10px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+        .rating {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .rating label {
+            text-align: center;
+            flex: 1;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .rating label:hover {
+            background-color: #e9ecef;
+            border-radius: 3px;
+        }
+        .rating input[type="radio"] {
+            margin: 0 auto;
+            display: block;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .submit-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 12px;
+            background-color: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #0e1642;
+        }
+        .instructions {
+            background-color: #e3f2fd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .rating-guide {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 0.8em;
+            color: #666;
+        }
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>기관장 기관경영 만족도 조사</h1>
+        
+        <div class="instructions">
+            <p>• 각 문항에 대해 1점(매우 불만족)부터 10점(매우 만족)까지의 점수로 평가해주세요.</p>
+            <p>• 모든 응답은 익명으로 처리되며, 평가 결과는 기관 운영 개선을 위한 자료로만 활용됩니다.</p>
+            <p>• 각 영역별로 20점 만점으로 환산되어 평가됩니다.</p>
+        </div>
+
+        <form id="surveyForm" onsubmit="return validateForm()">
+            <!-- 윤리의식 섹션 -->
+            <div class="section">
+                <div class="section-title">I. 윤리의식 (20점)</div>
+                <div class="question">
+                    <div class="question-text">1. 기관장은 업무에 대한 공정성과 공익성을 충분히 갖추고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="ethics1" value="1" required> 1</label>
+                        <label><input type="radio" name="ethics1" value="2"> 2</label>
+                        <label><input type="radio" name="ethics1" value="3"> 3</label>
+                        <label><input type="radio" name="ethics1" value="4"> 4</label>
+                        <label><input type="radio" name="ethics1" value="5"> 5</label>
+                        <label><input type="radio" name="ethics1" value="6"> 6</label>
+                        <label><input type="radio" name="ethics1" value="7"> 7</label>
+                        <label><input type="radio" name="ethics1" value="8"> 8</label>
+                        <label><input type="radio" name="ethics1" value="9"> 9</label>
+                        <label><input type="radio" name="ethics1" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+                <div class="question">
+                    <div class="question-text">2. 기관장은 업무권한에 걸친 정립의식이 몸과 행동에 녹아있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="ethics2" value="1" required> 1</label>
+                        <label><input type="radio" name="ethics2" value="2"> 2</label>
+                        <label><input type="radio" name="ethics2" value="3"> 3</label>
+                        <label><input type="radio" name="ethics2" value="4"> 4</label>
+                        <label><input type="radio" name="ethics2" value="5"> 5</label>
+                        <label><input type="radio" name="ethics2" value="6"> 6</label>
+                        <label><input type="radio" name="ethics2" value="7"> 7</label>
+                        <label><input type="radio" name="ethics2" value="8"> 8</label>
+                        <label><input type="radio" name="ethics2" value="9"> 9</label>
+                        <label><input type="radio" name="ethics2" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 리더 개인적 특성 섹션 -->
+            <div class="section">
+                <div class="section-title">II. 리더 개인적 특성 (20점)</div>
+                <div class="question">
+                    <div class="question-text">3. 기관장은 상대방을 무시하거나 비하하지 않고 인격적으로 대우하며 의견을 존중하는 등 바람직한 성품과 인격을 갖추고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="character1" value="1" required> 1</label>
+                        <label><input type="radio" name="character1" value="2"> 2</label>
+                        <label><input type="radio" name="character1" value="3"> 3</label>
+                        <label><input type="radio" name="character1" value="4"> 4</label>
+                        <label><input type="radio" name="character1" value="5"> 5</label>
+                        <label><input type="radio" name="character1" value="6"> 6</label>
+                        <label><input type="radio" name="character1" value="7"> 7</label>
+                        <label><input type="radio" name="character1" value="8"> 8</label>
+                        <label><input type="radio" name="character1" value="9"> 9</label>
+                        <label><input type="radio" name="character1" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+                <div class="question">
+                    <div class="question-text">4. 기관장은 직원의 특성 및 애로사항을 파악하여 배려함으로써 직원들이 업무를 잘 수행할 수 있도록 돕고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="character2" value="1" required> 1</label>
+                        <label><input type="radio" name="character2" value="2"> 2</label>
+                        <label><input type="radio" name="character2" value="3"> 3</label>
+                        <label><input type="radio" name="character2" value="4"> 4</label>
+                        <label><input type="radio" name="character2" value="5"> 5</label>
+                        <label><input type="radio" name="character2" value="6"> 6</label>
+                        <label><input type="radio" name="character2" value="7"> 7</label>
+                        <label><input type="radio" name="character2" value="8"> 8</label>
+                        <label><input type="radio" name="character2" value="9"> 9</label>
+                        <label><input type="radio" name="character2" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 리더십 섹션 -->
+            <div class="section">
+                <div class="section-title">III. 리더십 (20점)</div>
+                <div class="question">
+                    <div class="question-text">5. 기관장은 관련법령과 업무위임을 직접하게 하고 있으며, 부하직원의 업무능력 향상을 위해 많은 도움을 준다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="leadership1" value="1" required> 1</label>
+                        <label><input type="radio" name="leadership1" value="2"> 2</label>
+                        <label><input type="radio" name="leadership1" value="3"> 3</label>
+                        <label><input type="radio" name="leadership1" value="4"> 4</label>
+                        <label><input type="radio" name="leadership1" value="5"> 5</label>
+                        <label><input type="radio" name="leadership1" value="6"> 6</label>
+                        <label><input type="radio" name="leadership1" value="7"> 7</label>
+                        <label><input type="radio" name="leadership1" value="8"> 8</label>
+                        <label><input type="radio" name="leadership1" value="9"> 9</label>
+                        <label><input type="radio" name="leadership1" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+                <div class="question">
+                    <div class="question-text">6. 기관장은 정책의 민주적 결정을 존중하고, 부하직원과 소통하며 의사결정 및 업무를 수진하고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="leadership2" value="1" required> 1</label>
+                        <label><input type="radio" name="leadership2" value="2"> 2</label>
+                        <label><input type="radio" name="leadership2" value="3"> 3</label>
+                        <label><input type="radio" name="leadership2" value="4"> 4</label>
+                        <label><input type="radio" name="leadership2" value="5"> 5</label>
+                        <label><input type="radio" name="leadership2" value="6"> 6</label>
+                        <label><input type="radio" name="leadership2" value="7"> 7</label>
+                        <label><input type="radio" name="leadership2" value="8"> 8</label>
+                        <label><input type="radio" name="leadership2" value="9"> 9</label>
+                        <label><input type="radio" name="leadership2" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 조직문화 섹션 -->
+            <div class="section">
+                <div class="section-title">IV. 조직문화 (20점)</div>
+                <div class="question">
+                    <div class="question-text">7. 기관장은 부하 직원에게 부당한 요구를 하거나 편의를 제공받지 않는 등 수평적인 조직 문화를 만들어가는 데 모범이 되고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="culture1" value="1" required> 1</label>
+                        <label><input type="radio" name="culture1" value="2"> 2</label>
+                        <label><input type="radio" name="culture1" value="3"> 3</label>
+                        <label><input type="radio" name="culture1" value="4"> 4</label>
+                        <label><input type="radio" name="culture1" value="5"> 5</label>
+                        <label><input type="radio" name="culture1" value="6"> 6</label>
+                        <label><input type="radio" name="culture1" value="7"> 7</label>
+                        <label><input type="radio" name="culture1" value="8"> 8</label>
+                        <label><input type="radio" name="culture1" value="9"> 9</label>
+                        <label><input type="radio" name="culture1" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+                <div class="question">
+                    <div class="question-text">8. 기관장은 직원들의 일과 가정(개인사생활)이 조화롭게 양립할 수 있도록 배려하고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="culture2" value="1" required> 1</label>
+                        <label><input type="radio" name="culture2" value="2"> 2</label>
+                        <label><input type="radio" name="culture2" value="3"> 3</label>
+                        <label><input type="radio" name="culture2" value="4"> 4</label>
+                        <label><input type="radio" name="culture2" value="5"> 5</label>
+                        <label><input type="radio" name="culture2" value="6"> 6</label>
+                        <label><input type="radio" name="culture2" value="7"> 7</label>
+                        <label><input type="radio" name="culture2" value="8"> 8</label>
+                        <label><input type="radio" name="culture2" value="9"> 9</label>
+                        <label><input type="radio" name="culture2" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 노동조합의 이해 섹션 -->
+            <div class="section">
+                <div class="section-title">V. 노동조합의 이해 (20점)</div>
+                <div class="question">
+                    <div class="question-text">9. 기관장은 노동조합을 인정하고 노사간 갈등 사전 예방 등 수평적인 노사문화를 만들어가는데 모범이 되고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="labor1" value="1" required> 1</label>
+                        <label><input type="radio" name="labor1" value="2"> 2</label>
+                        <label><input type="radio" name="labor1" value="3"> 3</label>
+                        <label><input type="radio" name="labor1" value="4"> 4</label>
+                        <label><input type="radio" name="labor1" value="5"> 5</label>
+                        <label><input type="radio" name="labor1" value="6"> 6</label>
+                        <label><input type="radio" name="labor1" value="7"> 7</label>
+                        <label><input type="radio" name="labor1" value="8"> 8</label>
+                        <label><input type="radio" name="labor1" value="9"> 9</label>
+                        <label><input type="radio" name="labor1" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+                <div class="question">
+                    <div class="question-text">10. 기관장은 노사상생을 위해 노동조합과 협력 상생관계 유지를 위해 노동조합 활동을 배려하고 있다.</div>
+                    <div class="rating-guide">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                    <div class="rating">
+                        <label><input type="radio" name="labor2" value="1" required> 1</label>
+                        <label><input type="radio" name="labor2" value="2"> 2</label>
+                        <label><input type="radio" name="labor2" value="3"> 3</label>
+                        <label><input type="radio" name="labor2" value="4"> 4</label>
+                        <label><input type="radio" name="labor2" value="5"> 5</label>
+                        <label><input type="radio" name="labor2" value="6"> 6</label>
+                        <label><input type="radio" name="labor2" value="7"> 7</label>
+                        <label><input type="radio" name="labor2" value="8"> 8</label>
+                        <label><input type="radio" name="labor2" value="9"> 9</label>
+                        <label><input type="radio" name="labor2" value="10"> 10</label>
+                    </div>
+                    <div class="error-message">이 문항에 답변해 주세요.</div>
+                </div>
+            </div>
+
+            <!-- 기타 의견 섹션 -->
+            <div class="section">
+                <div class="section-title">경영진에게 바라는 점</div>
+                <textarea name="comments" placeholder="경영진에게 바라는 점이나 건의사항을 자유롭게 작성해주세요."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">설문 제출</button>
+        </form>
+    </div>
+
+    <script>
+        // 설문 응답을 처리하고 결과를 계산하는 함수
+        async function submitSurvey(formData) {
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    alert(result.message);
+                    location.reload(); // 새로운 설문을 위해 페이지 리로드
+                } else {
+                    alert('제출 중 오류가 발생했습니다: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('제출 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 폼 유효성 검사 및 결과 계산 함수
+        function validateForm() {
+            const form = document.getElementById('surveyForm');
+            const categories = {
+                'ethics': ['ethics1', 'ethics2'],
+                'character': ['character1', 'character2'],
+                'leadership': ['leadership1', 'leadership2'],
+                'culture': ['culture1', 'culture2'],
+                'labor': ['labor1', 'labor2']
+            };
+
+            // 모든 필수 라디오 버튼 체크 확인
+            for (const [category, questions] of Object.entries(categories)) {
+                for (const question of questions) {
+                    const radios = form.elements[question];
+                    let checked = false;
+                    for (const radio of radios) {
+                        if (radio.checked) {
+                            checked = true;
+                            break;
+                        }
+                    }
+                    if (!checked) {
+                        // 해당 문항의 오류 메시지 표시
+                        const errorDiv = radios[0].closest('.question').querySelector('.error-message');
+                        errorDiv.style.display = 'block';
+                        radios[0].closest('.question').scrollIntoView({ behavior: 'smooth' });
+                        return false;
+                    }
+                }
+            }
+
+            // 결과 계산
+            const results = {};
+            
+            // 각 카테고리별 점수 계산 (20점 만점으로 환산)
+            for (const [category, questions] of Object.entries(categories)) {
+                const sum = questions.reduce((acc, q) => {
+                    return acc + parseInt(form.elements[q].value);
+                }, 0);
+                results[`${category}_평균점수`] = (sum / questions.length) * 2;
+            }
+
+            // 총점 계산
+            results['총점'] = Object.values(results).reduce((acc, val) => acc + val, 0) / 5;
+            
+            // 기타 의견 추가
+            results['기타의견'] = form.elements['comments'].value;
+
+            // 서버로 전송
+            submitSurvey(results);
+            return false; // 폼 기본 제출 방지
+        }
+
+        // 페이지 로드 시 모든 오류 메시지 숨기기
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+
+            // 라디오 버튼 선택 시 해당 문항의 오류 메시지 숨기기
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const errorDiv = this.closest('.question').querySelector('.error-message');
+                    errorDiv.style.display = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+Last edited 1 minute ago
